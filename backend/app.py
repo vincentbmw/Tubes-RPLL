@@ -10,7 +10,9 @@ from llama_index.core import ServiceContext, StorageContext, VectorStoreIndex
 from llama_index.vector_stores.mongodb import MongoDBAtlasVectorSearch
 from llama_index.llms.gemini import Gemini
 from llama_index.core import Settings
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, session
+from werkzeug.security import generate_password_hash, check_password_hash
+import datetime
 from pyngrok import ngrok
 
 app = Flask(__name__)
@@ -18,6 +20,7 @@ app = Flask(__name__)
 # Define variables
 DB_NAME = 'dogs'
 COLLECTION_NAME = 'type'
+USERS_COLLECTION_NAME = 'credentials'
 config = dotenv_values(find_dotenv())
 service_context = None
 vector_store = None
@@ -37,6 +40,15 @@ def initialize():
     mongodb_client = pymongo.MongoClient(ATLAS_URI)
     print('Atlas client successfully initialized!')
     return mongodb_client
+
+# Fungsi untuk mendapatkan koneksi MongoDB untuk user
+def get_users_db():
+    ATLAS_URI = config.get('ATLAS_URI')
+    if not ATLAS_URI:
+        raise Exception("'ATLAS_URI' is not set. Please set it in .env before continuing...")
+    client = pymongo.MongoClient(ATLAS_URI)
+    db = client[DB_NAME]
+    return db
 
 # LLM Function
 def setup_llm():
@@ -68,6 +80,76 @@ def connect_llm(client):
 def run_query(text):
     response = index.as_query_engine().query(text)
     return response
+
+@app.route('/api/register', methods=['POST'])
+def register():
+    db = get_users_db()
+    users_collection = db[USERS_COLLECTION_NAME]
+
+    try:
+        data = request.get_json()
+        name = data.get('name')
+        email = data.get('email')
+        password = data.get('password')
+        gender = data.get('gender')
+
+        if not all([name, email, password, gender]): 
+            return jsonify({'error': 'Missing required fields'}), 400
+
+        existing_user = users_collection.find_one({'email': email})
+        if existing_user:
+            return jsonify({'error': 'Email already exists'}), 400
+
+        hashed_password = generate_password_hash(password)
+
+        # Tentukan URL gambar profil berdasarkan gender
+        if gender.lower() == 'male':
+            profile_picture = "https://firebasestorage.googleapis.com/v0/b/gotravel-9fad0.appspot.com/o/profile_pictures%2Fmale.png?alt=media&token=ed087933-e6cb-4781-b952-67cdf37b8dad" 
+        else:
+            profile_picture = "https://firebasestorage.googleapis.com/v0/b/<your-firebase-project-id>.appspot.com/o/profile_pictures%2Ffemale.png?alt=media&token=<your-token>" 
+
+        new_user = {
+            'name': name,
+            'email': email,
+            'password': hashed_password,
+            'gender': gender,
+            'chats': [],
+            'profile_picture': profile_picture
+        }
+        users_collection.insert_one(new_user)
+
+        return jsonify({'message': 'User registered successfully'}), 201
+
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+
+@app.route('/api/login', methods=['POST'])
+def login():
+    db = get_users_db()
+    users_collection = db[USERS_COLLECTION_NAME]
+
+    try:
+        data = request.get_json()
+        email = data.get('email')
+        password = data.get('password')
+
+        if not all([email, password]):
+            return jsonify({'error': 'Missing email or password'}), 400
+
+        user = users_collection.find_one({'email': email})
+        if not user:
+            return jsonify({'error': 'Invalid credentials'}), 401
+
+        if not check_password_hash(user['password'], password):
+            return jsonify({'error': 'Invalid credentials'}), 401
+
+        session['user_id'] = str(user['_id'])
+        
+        return jsonify({'message': 'Login successful'}), 200
+
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+
 
 @app.route('/api/query', methods=['POST'])
 def api_query():
