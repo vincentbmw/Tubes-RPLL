@@ -1,0 +1,18 @@
+python-dotenv==1.0.0
+pymongo[srv]
+python-telegram-bot
+urllib3==1.26.15
+
+## LLMs / embeddings
+llama-index-llms-gemini
+llama-index
+llama-index-vector-stores-mongodb
+llama-index-embeddings-google
+
+## Utils
+flask==3.1.2
+pyngrok==5.2.0
+ipykernel
+ipython
+chardet==5.2.0
+charset-normalizer==3.3.2
