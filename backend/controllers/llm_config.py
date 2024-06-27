@@ -4,9 +4,11 @@ from llama_index.core import ServiceContext, StorageContext, VectorStoreIndex
 from llama_index.vector_stores.mongodb import MongoDBAtlasVectorSearch
 from llama_index.llms.gemini import Gemini
 from llama_index.core import Settings
+from controllers.database import get_users_db
 import pymongo
 import datetime
 import uuid
+from bson.objectid import ObjectId
 
 # LLM Configuration
 service_context = None
@@ -26,9 +28,8 @@ def setup_llm(api_key):
     
     Settings.embed_model = GooglePaLMEmbedding(model_name=model_name, api_key=api_key)
     Settings.llm = Gemini(model="models/gemini-1.5-pro", temperature=0.7, system_prompt="""
-    You are an efficient language model designed to respond promptly to user inquiries.
-    Responses should be concise and to the point, avoiding unnecessary elaboration unless requested by the user.
-    Remember to give another dog breeds if users didn't like it                      
+    Anda adalah asisten chatbot yang membantu pengguna dalam mencari informasi tentang anjing.
+    Selalu jawab pertanyaan pengguna dalam Bahasa Indonesia yang baik dan benar.                      
     """)
     service_context = ServiceContext.from_defaults(embed_model=Settings.embed_model, llm=Settings.llm)
 
@@ -55,35 +56,28 @@ def run_query(text, user_id):
 
     return response
 
-def get_users_db():
-    """Mendapatkan koneksi ke database user."""
-    client = pymongo.MongoClient(ATLAS_URI)
-    db = client[DB_NAME]
-    return db
-
 def save_chat(user_id, user_message, bot_response):
     """Menyimpan chat ke database user."""
     db = get_users_db()
     users_collection = db[USERS_COLLECTION_NAME]
 
     try:
-        user = users_collection.find_one({'_id': ObjectId(user_id)})
-        if not user:
-            print(f"Error: User with ID {user_id} not found!")  
-            return
-
-        new_chat = {
-            "chatId": str(uuid.uuid4()), 
-            "createdAt": datetime.datetime.utcnow(),
-            "prompts": [
-                {"user": user_message, "bot": bot_response}
-            ]
-        }
-
-        users_collection.update_one(
+        result = users_collection.update_one(
             {'_id': ObjectId(user_id)},
-            {'$push': {'chats': new_chat}}
+            {
+                '$push': {
+                    'chats': {
+                        "chatId": str(uuid.uuid4()), 
+                        "createdAt": datetime.datetime.utcnow(),
+                        "prompts": [
+                            {"user": user_message, "bot": bot_response}
+                        ]
+                    }
+                }
+            }
         )
 
+        if result.modified_count == 0:
+            print(f"Error: User with ID {user_id} not found!")  
     except Exception as e:
         print(f"Error saving chat: {str(e)}") 

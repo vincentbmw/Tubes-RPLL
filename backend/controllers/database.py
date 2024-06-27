@@ -1,4 +1,5 @@
 import pymongo
+import os
 
 def initialize(ATLAS_URI):
     """Menghubungkan ke MongoDB Atlas."""
@@ -14,5 +15,5 @@ def get_users_db():
     if not ATLAS_URI:
         raise Exception("'ATLAS_URI' is not set. Please set it in .env before continuing...")
     client = pymongo.MongoClient(ATLAS_URI)
-    db = client['users']
+    db = client['dogs']
     return db 
