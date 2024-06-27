@@ -6,8 +6,9 @@ from flask import jsonify, request, session
 from dotenv import find_dotenv, dotenv_values
 from controllers.login import login_blueprint
 from controllers.register import register_blueprint
-from controllers.database import initialize
-from controllers.manage_profile import manage_profile_blueprint  
+from controllers.database import initialize  
+from controllers.manage_profile import manage_profile_blueprint
+from controllers.logout import logout_blueprint
 from controllers.llm_config import setup_llm, connect_llm, run_query 
 
 app = Flask(__name__)
@@ -20,6 +21,7 @@ config = dotenv_values(find_dotenv())
 app.register_blueprint(login_blueprint)
 app.register_blueprint(register_blueprint)
 app.register_blueprint(manage_profile_blueprint)
+app.register_blueprint(logout_blueprint)
 
 # Rute untuk query (contoh)
 @app.route('/api/query', methods=['POST'])
