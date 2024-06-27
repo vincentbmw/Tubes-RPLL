@@ -1,13 +1,13 @@
 from flask import Blueprint, request, jsonify
 from werkzeug.security import generate_password_hash
-from database import get_users_db  
+from controllers.database import get_users_db  
 
 register_blueprint = Blueprint('register', __name__)
 
 @register_blueprint.route('/api/register', methods=['POST'])
 def register():
     db = get_users_db()
-    users_collection = db['credentials'] 
+    users_collection = db['users'] 
 
     try:
         data = request.get_json()
@@ -25,13 +25,10 @@ def register():
 
         hashed_password = generate_password_hash(password)
 
-        # Tentukan URL gambar profil berdasarkan gender
         if gender.lower() == 'male':
             profile_picture = "https://firebasestorage.googleapis.com/v0/b/gotravel-9fad0.appspot.com/o/profile_pictures%2Fmale.png?alt=media&token=ed087933-e6cb-4781-b952-67cdf37b8dad" 
-        elif gender.lower() == 'female':
-            profile_picture = "https://firebasestorage.googleapis.com/v0/b/<your-firebase-project-id>.appspot.com/o/profile_pictures%2Ffemale.png?alt=media&token=<your-token>" 
         else:
-            profile_picture = "https://example.com/default_profile.png" # Ganti dengan URL default
+            profile_picture = "https://firebasestorage.googleapis.com/v0/b/gotravel-9fad0.appspot.com/o/profile_pictures%2Ffemale.png?alt=media&token=4f6f872c-f971-42c8-b526-a39ac604ddb5" 
 
         new_user = {
             'name': name,

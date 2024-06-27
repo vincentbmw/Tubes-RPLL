@@ -1,13 +1,13 @@
 from flask import Blueprint, request, jsonify, session
 from werkzeug.security import check_password_hash
-from database import get_users_db  
+from controllers.database import get_users_db  
 
 login_blueprint = Blueprint('login', __name__)
 
 @login_blueprint.route('/api/login', methods=['POST'])
 def login():
     db = get_users_db()
-    users_collection = db['credentials']  
+    users_collection = db['users']  
 
     try:
         data = request.get_json()
