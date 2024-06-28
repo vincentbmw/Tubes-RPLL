@@ -5,10 +5,7 @@ from llama_index.vector_stores.mongodb import MongoDBAtlasVectorSearch
 from llama_index.llms.gemini import Gemini
 from llama_index.core import Settings
 from controllers.database import get_users_db
-import pymongo
-import datetime
-import uuid
-from bson.objectid import ObjectId
+from controllers.chats import save_chat, save_to_previous_chat
 
 # LLM Configuration
 service_context = None
@@ -20,7 +17,6 @@ COLLECTION_NAME = 'type'
 USERS_COLLECTION_NAME = "users"
 
 def setup_llm(api_key):
-    """Menyiapkan Google Gemini LLM dan embedding."""
     global service_context 
 
     model_name = "models/embedding-gecko-001"
@@ -35,7 +31,6 @@ def setup_llm(api_key):
 
 
 def connect_llm(client):
-    """Menghubungkan LLM ke MongoDB Vector Store."""
     global index
     vector_store = MongoDBAtlasVectorSearch(
         mongodb_client=client,
@@ -46,38 +41,14 @@ def connect_llm(client):
     
     index = VectorStoreIndex.from_vector_store(vector_store=vector_store, service_context=service_context)
 
-def run_query(text, user_id): 
-    """Menjalankan query pada LLM dan menyimpan chat."""
+def run_query(text, user_id, chat_id=None):
     global index
 
     response = index.as_query_engine().query(text)
 
-    save_chat(user_id, text, str(response)) 
+    if chat_id:
+        save_to_previous_chat(user_id, text, str(response), chat_id)
+    else:
+        save_chat(user_id, text, str(response))
 
     return response
-
-def save_chat(user_id, user_message, bot_response):
-    """Menyimpan chat ke database user."""
-    db = get_users_db()
-    users_collection = db[USERS_COLLECTION_NAME]
-
-    try:
-        result = users_collection.update_one(
-            {'_id': ObjectId(user_id)},
-            {
-                '$push': {
-                    'chats': {
-                        "chatId": str(uuid.uuid4()), 
-                        "createdAt": datetime.datetime.utcnow(),
-                        "prompts": [
-                            {"user": user_message, "bot": bot_response}
-                        ]
-                    }
-                }
-            }
-        )
-
-        if result.modified_count == 0:
-            print(f"Error: User with ID {user_id} not found!")  
-    except Exception as e:
-        print(f"Error saving chat: {str(e)}") 
