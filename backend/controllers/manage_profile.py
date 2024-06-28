@@ -8,14 +8,6 @@ USERS_COLLECTION_NAME = 'users'
 
 @manage_profile_blueprint.route('/api/manage_profile', methods=['PUT'])
 def update_user():
-    """Memperbarui profil user.
-    
-    Args:
-        user_id: ID user yang akan diupdate.
-
-    Returns:
-        JSON response dengan pesan sukses atau error.
-    """
     db = get_users_db()
     users_collection = db[USERS_COLLECTION_NAME]
 
@@ -27,13 +19,11 @@ def update_user():
         data = request.get_json()
         update_data = {}
 
-        # Periksa field yang akan diupdate
         if 'name' in data:
             update_data['name'] = data['name']
         if 'email' in data:
             update_data['email'] = data['email']
         if 'password' in data:
-            # Hash password baru jika diberikan
             update_data['password'] = generate_password_hash(data['password']) 
         if 'gender' in data:
             update_data['gender'] = data['gender']
