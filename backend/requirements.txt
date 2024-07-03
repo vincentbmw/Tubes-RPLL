@@ -10,8 +10,8 @@ llama-index-vector-stores-mongodb
 llama-index-embeddings-google
 
 ## Utils
-flask==3.1.2
-pyngrok==5.2.0
+Flask
+pyngrok
 ipykernel
 ipython
 chardet==5.2.0
