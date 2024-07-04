@@ -1,5 +1,5 @@
 import os
-from llama_index.embeddings.google import GooglePaLMEmbedding
+from llama_index.embeddings.huggingface import HuggingFaceEmbedding
 from llama_index.core import ServiceContext, StorageContext, VectorStoreIndex
 from llama_index.vector_stores.mongodb import MongoDBAtlasVectorSearch
 from llama_index.llms.gemini import Gemini
@@ -17,15 +17,12 @@ COLLECTION_NAME = 'type'
 def setup_llm(api_key):
     global service_context 
 
-    model_name = "models/embedding-gecko-001"
     os.environ["GOOGLE_API_KEY"] = api_key
     
-    Settings.embed_model = GooglePaLMEmbedding(model_name=model_name, api_key=api_key)
-    Settings.llm = Gemini(model="models/gemini-1.5-pro", temperature=0.7, system_prompt="""
-    You are an efficient language model designed to respond promptly to user inquiries.
-    Responses should be concise and to the point, avoiding unnecessary elaboration unless requested by the user.
-    Remember to give another dog breeds if users didn't like it                      
-    """)
+    Settings.embed_model = HuggingFaceEmbedding(
+        model_name="sentence-transformers/all-MiniLM-L6-v2"
+    )
+    Settings.llm = Gemini(model="models/gemini-1.5-pro", temperature=0.7)
     service_context = ServiceContext.from_defaults(embed_model=Settings.embed_model, llm=Settings.llm)
 
 

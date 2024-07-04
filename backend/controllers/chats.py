@@ -37,6 +37,13 @@ class ChatRepository:
             }
         )
         return result.modified_count > 0
+    
+    def save_chat(self, user_id, chat_data):
+        result = self.collection.update_one(
+            {'_id': ObjectId(user_id)},
+            {'$push': {'chats': chat_data}}
+        )
+        return result.modified_count > 0
 
 # --- Strategy Pattern ---
 

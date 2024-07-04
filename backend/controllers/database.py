@@ -23,11 +23,18 @@ class DatabaseFactory:
             raise Exception("'ATLAS_URI' is not set. Please set it in .env before continuing...")
         return Database(atlas_uri)
 
-def initialize(ATLAS_URI):
+def initialize():
+    ATLAS_URI = config.get('ATLAS_URI')
+    print(f"ATLAS_URI detected is: {ATLAS_URI}")
+
     if not ATLAS_URI:
-        raise Exception("'ATLAS_URI' is not set. Please set it in .env before continuing...")
-    client = pymongo.MongoClient(ATLAS_URI)
-    return client
+        raise Exception ("'ATLAS_URI' is not set. Please set it in .env before continuing...")
+
+    os.environ['LLAMA_INDEX_CACHE_DIR'] = os.path.join(os.path.abspath('../'), 'cache')
+
+    mongodb_client = pymongo.MongoClient(ATLAS_URI)
+    print ('Atlas client succesfully initialized!')
+    return mongodb_client
 
 def get_users_db():
     """Mendapatkan database 'users'."""
