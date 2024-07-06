@@ -2,7 +2,7 @@ body {
     margin: 0;
     padding: 0;
     font-family: Arial, sans-serif;
-    background: url(../static/img/backgroundLoginRegis2.webp) no-repeat center center fixed;
+    background: url(../img/backgroundLoginRegis2.webp) no-repeat center center fixed;
     background-size: cover;
 }
 
@@ -20,8 +20,8 @@ body {
 }
 
 .login-container img {
-    width: 135px;
-    height: auto;
+    width: 135px; /* Adjust logo width */
+    height: auto; /* Maintain aspect ratio */
 }
 
 .login-container h1 {
@@ -78,4 +78,17 @@ body {
 .login-container h1 {
     margin-bottom: 20px;
     font-size: 30px;
+}
+.radio-group {
+    margin: 10px 0;
+    text-align: left;
+    font-size: 16px;
+    display: flex;
+    justify-content: center;
+}
+
+.radio-group label {
+    margin-right: 20px;
+    display: flex;
+    align-items: center;
 }
