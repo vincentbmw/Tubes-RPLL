@@ -76,34 +76,9 @@ class NewChatSaver(ChatSaver):
         }
         return repository.save_chat(user_id, new_chat)
 
-def get_chat_prompts(chat_id):
-    db = get_users_db()
-    users_collection = db[USERS_COLLECTION_NAME]
-
-    try:
-        user_id = session.get('user_id')
-        if not user_id:
-            return jsonify({'error': 'Unauthorized'}), 401
-
-        user = users_collection.find_one(
-            {'_id': ObjectId(user_id), 'chats.chatId': chat_id},
-            {'chats.$': 1}
-        )
-
-        if not user:
-            return jsonify({'error': 'Chat not found'}), 404
-
-        chat = user.get('chats', [{}])[0]
-        prompts = chat.get('prompts', []) 
-
-        return {'prompts': prompts}, 200
-
-    except Exception as e:
-        return jsonify({'error': str(e)}), 500
-
 # --- Route Handlers ---
 
-@chats_blueprint.route('/chats', methods=['GET'])
+@chats_blueprint.route('/api/chats', methods=['GET'])
 def get_chats():
     db = get_users_db()
     repository = ChatRepository(db)  
@@ -130,25 +105,27 @@ def get_chats():
     except Exception as e:
         return jsonify({'error': str(e)}), 500
 
-@chats_blueprint.route('/delete_chats/<chat_id>', methods=['DELETE'])
-def delete_chat(chat_id):
+def get_chat_prompts(chat_id):
     db = get_users_db()
-    repository = ChatRepository(db)
+    users_collection = db[USERS_COLLECTION_NAME]
 
     try:
         user_id = session.get('user_id')
         if not user_id:
             return jsonify({'error': 'Unauthorized'}), 401
 
-        result = repository.collection.update_one(
-            {'_id': ObjectId(user_id)},
-            {'$pull': {'chats': {'chatId': chat_id}}}
+        user = users_collection.find_one(
+            {'_id': ObjectId(user_id), 'chats.chatId': chat_id},
+            {'chats.$': 1}
         )
 
-        if result.modified_count == 1:
-            return jsonify({'message': 'Chat deleted successfully'}), 200
-        else:
+        if not user:
             return jsonify({'error': 'Chat not found'}), 404
+
+        chat = user.get('chats', [{}])[0]
+        prompts = chat.get('prompts', []) 
+
+        return {'prompts': prompts}, 200
 
     except Exception as e:
         return jsonify({'error': str(e)}), 500
