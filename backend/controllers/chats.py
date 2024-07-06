@@ -78,7 +78,7 @@ class NewChatSaver(ChatSaver):
 
 # --- Route Handlers ---
 
-@chats_blueprint.route('/api/chats', methods=['GET'])
+@chats_blueprint.route('/chats', methods=['GET'])
 def get_chats():
     db = get_users_db()
     repository = ChatRepository(db)  
@@ -137,6 +137,36 @@ def get_chat_prompts(chat_id):
 
         return messages, 200
 
-        
     except Exception as e:
         return None, 500
+    
+@chats_blueprint.route('/delete_chats/<chat_id>', methods=['DELETE'])
+def delete_chat(chat_id):
+    """Menghapus chat berdasarkan chat_id.
+
+    Args:
+        chat_id: ID chat yang akan dihapus.
+
+    Returns:
+        JSON response dengan pesan sukses atau error.
+    """
+    db = get_users_db()
+    repository = ChatRepository(db)
+
+    try:
+        user_id = session.get('user_id')
+        if not user_id:
+            return jsonify({'error': 'Unauthorized'}), 401
+
+        result = repository.collection.update_one(
+            {'_id': ObjectId(user_id)},
+            {'$pull': {'chats': {'chatId': chat_id}}}
+        )
+
+        if result.modified_count == 1:
+            return jsonify({'message': 'Chat deleted successfully'}), 200
+        else:
+            return jsonify({'error': 'Chat not found'}), 404
+
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500

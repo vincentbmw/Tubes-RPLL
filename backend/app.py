@@ -49,7 +49,7 @@ def chatpage_with_id(chat_id):
         return render_template('chat-page-with-id.html', chats=chat_list, chat_id=chat_id, messages=[])
 
 
-@app.route('/api/query', methods=['POST'])
+@app.route('/query', methods=['POST'])
 def api_query():
     try:
         user_id = session.get('user_id')
@@ -68,7 +68,7 @@ def api_query():
     except Exception as e:
         return jsonify({'error': str(e)}), 500
 
-@app.route('/api/profile', methods=['GET'])
+@app.route('/profile', methods=['GET'])
 def get_profile():
     profile_data, status_code = get_user_profile_data()
     if status_code == 200:
@@ -76,7 +76,7 @@ def get_profile():
     else:
         return profile_data, status_code
 
-@app.route('/api/<chat_id>/prompts', methods=['GET'])
+@app.route('/<chat_id>/prompts', methods=['GET'])
 def get_prompts(chat_id):
     prompts_data, status_code = get_chat_prompts(chat_id)
     if status_code == 200:

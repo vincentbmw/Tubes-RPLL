@@ -6,7 +6,7 @@ from controllers.database import get_users_db
 manage_profile_blueprint = Blueprint('manage_profile', __name__)
 USERS_COLLECTION_NAME = 'users'
 
-@manage_profile_blueprint.route('/api/manage_profile', methods=['PUT'])
+@manage_profile_blueprint.route('/manage_profile', methods=['PUT'])
 def update_user():
     db = get_users_db()
     users_collection = db[USERS_COLLECTION_NAME]
