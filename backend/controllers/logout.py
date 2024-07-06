@@ -1,4 +1,4 @@
-from flask import Blueprint, session, jsonify
+from flask import Blueprint, session, jsonify, redirect, url_for
 
 logout_blueprint = Blueprint('logout', __name__)
 
@@ -8,7 +8,9 @@ def logout():
     """
     try:
         session.pop('user_id', None)
-        return jsonify({'message': 'Logout successful'}), 200
+
+        return redirect(url_for('loginpage'))
+        # return jsonify({'message': 'Logout successful'}), 200
 
     except Exception as e:
         return jsonify({'error': str(e)}), 500
