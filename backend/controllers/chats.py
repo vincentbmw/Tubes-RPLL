@@ -86,11 +86,11 @@ def get_chats():
     try:
         user_id = session.get('user_id')
         if not user_id:
-            return jsonify({'error': 'Unauthorized'}), 401
+            return None, 401
 
         chats = repository.get_chats_by_user_id(user_id)
         if chats is None:
-            return jsonify({'error': 'User not found'}), 404
+            return None, 404
 
         chat_list = []
         for chat in chats:
@@ -100,10 +100,10 @@ def get_chats():
                 'firstPrompt': first_prompt,
             })
 
-        return jsonify({'chats': chat_list}), 200
+        return chat_list, 200
 
     except Exception as e:
-        return jsonify({'error': str(e)}), 500
+        return str(e), 500
 
 def get_chat_prompts(chat_id):
     db = get_users_db()
