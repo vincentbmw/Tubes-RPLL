@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chatbot UI</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='chat-page-style.css') }}">
+</head>
+<body>
+    <div class="chat-container">
+        <div class="sidebar" id="sidebar">
+            <div class="menu-button" id="menu-button">
+                <span>☰</span>
+            </div>
+            <div class="menu-items" id="menu-items">
+                <button onclick="window.location.href='/chatpage'" class="menu-item new-chat">New Chat</button>
+                {% for chat in chats %}
+                <button onclick="window.location.href='/chatpage/{{ chat.chatId }}'" class="menu-item" data-chat-id="{{ chat.chatId }}">
+                    {{ chat.firstPrompt }}
+                </button>
+                {% endfor %}
+                
+            </div>
+
+            <div class="user-profile" id="user-profile" data-img="{{ url_for('static', filename='img/male.PNG') }}">
+                <img src="{{ url_for('static', filename='img/male.PNG') }}" alt="User">
+                <span>Welcome back, Evan</span>
+                <div class="dropdown-content" id="dropdown-content">
+                    <button class="dropdown-item" id="logout-button">Log Out</button>
+                    <button class="dropdown-item" id="manage-profile-button">Manage Profile</button>
+                </div>
+            </div>
+        </div>
+        <div class="chat-section">
+            {% block body %}
+            <div class="chat-box" id="chat-box" data-user-img="{{ url_for('static', filename='img/male.PNG') }}" data-bot-img="{{ url_for('static', filename='img/dog.PNG') }}">
+                <!-- Default messages or empty state -->
+            </div>
+            {% endblock %}
+            <div class="chat-input-container">
+                    <input type="hidden" name="chatId" id="chat-id" value="{{ chat_id }}">
+                    <input type="text" name="query" id="user-input" placeholder="Type a new message here...">
+                    <button type="submit" id="send-button">Send</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="popup" id="popup">
+        <div class="popup-content">
+            <img src="{{ url_for('static', filename='img/pawspectiveIcon.png') }}" alt="Pawspective Logo" class="popup-logo">
+            <h2>LOG OUT</h2>
+            <p>Are you sure you want to logout?</p>
+            <div class="popup-buttons">
+                <button id="cancel-button" class="popup-button cancel-button">No, Cancel</button>
+                <form action="/api/logout" method="post" style="display: inline;">
+                    <button type="submit" class="popup-button confirm-button">Yes, Logout</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script src="{{ url_for('static', filename='chat-page-script.js') }}"></script>
+</body>
+</html>

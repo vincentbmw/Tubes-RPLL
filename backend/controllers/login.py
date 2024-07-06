@@ -1,4 +1,4 @@
-from flask import Blueprint, request, jsonify, session
+from flask import Blueprint, request, jsonify, session, redirect, url_for
 from werkzeug.security import check_password_hash
 from controllers.database import get_users_db  
 
@@ -10,23 +10,22 @@ def login():
     users_collection = db['users']  
 
     try:
-        data = request.get_json()
-        email = data.get('email')
-        password = data.get('password')
+        email = request.form.get('email')
+        password = request.form.get('password')
 
         if not all([email, password]):
-            return jsonify({'error': 'Missing email or password'}), 400
+            return jsonify('login-page.html', error='Missing email or password'), 400
 
         user = users_collection.find_one({'email': email})
         if not user:
-            return jsonify({'error': 'Invalid credentials'}), 401
+            return jsonify('login-page.html', error= 'Invalid credentials'), 401
 
         if not check_password_hash(user['password'], password):
-            return jsonify({'error': 'Invalid credentials'}), 401
+            return jsonify('login-page.html', error= 'Invalid credentials'), 401
 
         session['user_id'] = str(user['_id'])
         
-        return jsonify({'message': 'Login successful'}), 200
+        return redirect(url_for('chatpage'))
 
     except Exception as e:
-        return jsonify({'error': str(e)}), 500
+        return jsonify('login-page.html', error= str(e)), 500
