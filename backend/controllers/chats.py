@@ -86,7 +86,7 @@ def get_chats():
     try:
         user_id = session.get('user_id')
         if not user_id:
-            return None, 401
+            return jsonify({'error': 'Unauthorized'}), 401
 
         chats = repository.get_chats_by_user_id(user_id)
         if chats is None:
@@ -103,7 +103,7 @@ def get_chats():
         return chat_list, 200
 
     except Exception as e:
-        return str(e), 500
+        return jsonify({'error': str(e)}), 500
 
 def get_chat_prompts(chat_id):
     db = get_users_db()
@@ -112,7 +112,7 @@ def get_chat_prompts(chat_id):
     try:
         user_id = session.get('user_id')
         if not user_id:
-            return None, 401
+            return jsonify({'error': 'Unauthorized'}), 401
 
         user = users_collection.find_one(
             {'_id': ObjectId(user_id), 'chats.chatId': chat_id},
@@ -138,18 +138,10 @@ def get_chat_prompts(chat_id):
         return messages, 200
 
     except Exception as e:
-        return None, 500
+        return jsonify({'error': str(e)}), 500
     
 @chats_blueprint.route('/delete_chats/<chat_id>', methods=['DELETE'])
 def delete_chat(chat_id):
-    """Menghapus chat berdasarkan chat_id.
-
-    Args:
-        chat_id: ID chat yang akan dihapus.
-
-    Returns:
-        JSON response dengan pesan sukses atau error.
-    """
     db = get_users_db()
     repository = ChatRepository(db)
 
