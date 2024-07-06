@@ -2,7 +2,7 @@ from flask import Blueprint, session, jsonify, redirect, url_for
 
 logout_blueprint = Blueprint('logout', __name__)
 
-@logout_blueprint.route('/api/logout', methods=['POST'])
+@logout_blueprint.route('/logout', methods=['POST'])
 def logout():
     """Melakukan logout user dengan menghapus session.
     """

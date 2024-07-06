@@ -4,7 +4,7 @@ from controllers.database import get_users_db
 
 login_blueprint = Blueprint('login', __name__)
 
-@login_blueprint.route('/api/login', methods=['POST'])
+@login_blueprint.route('/login', methods=['POST'])
 def login():
     db = get_users_db()
     users_collection = db['users']  

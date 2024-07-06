@@ -4,7 +4,7 @@ from controllers.database import get_users_db
 
 register_blueprint = Blueprint('register', __name__)
 
-@register_blueprint.route('/api/register', methods=['POST'])
+@register_blueprint.route('/register', methods=['POST'])
 def register():
     db = get_users_db()
     users_collection = db['users'] 
