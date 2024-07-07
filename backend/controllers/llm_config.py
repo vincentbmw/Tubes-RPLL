@@ -44,10 +44,12 @@ def run_query(text, user_id, chat_id=None):
 
     if chat_id:
         saver = PreviousChatSaver()
+        saver.save(user_id, text, str(response), chat_id)
     else:
         saver = NewChatSaver()
+        saver.save(user_id, text, str(response))
+        chat_id = saver.chat_id
 
-    saver.save(user_id, text, str(response), chat_id)
     print("Pesan berhasil disimpan ke database")
 
-    return response
+    return {"response": str(response), "chatId": chat_id}

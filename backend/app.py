@@ -48,6 +48,13 @@ def chatpage_with_id(chat_id):
     else:
         return render_template('chat-page-with-id.html', chats=chat_list, chat_id=chat_id, messages=[])
 
+@app.route('/log', methods=['POST'])
+def log_message():
+    data = request.get_json()
+    message = data.get('message', 'No message provided')
+    print(f"Client log: {message}")
+    return jsonify({'status': 'success'}), 200
+
 
 @app.route('/query', methods=['POST'])
 def api_query():
@@ -63,10 +70,13 @@ def api_query():
             return jsonify({'error': 'Missing "query" parameter'}), 400
 
         response = run_query(query_text, user_id, chat_id) 
-        return jsonify({'response': str(response)})
+        print("Response from run_query:", response) 
+        return jsonify(response)
 
     except Exception as e:
+        print(f"Error in api_query: {str(e)}")
         return jsonify({'error': str(e)}), 500
+    
 
 @app.route('/profile', methods=['GET'])
 def get_profile():
@@ -82,13 +92,13 @@ def get_prompts(chat_id):
     if status_code == 200:
         return jsonify(prompts_data), 200
     else:
-        return prompts_data, status_code
+        return jsonify(prompts_data), status_code
 
 if __name__ == '__main__':
     ip = urlopen('https://api.ipify.org').read().decode('utf-8')
     print(f"My public IP is '{ip}'. Make sure this IP is allowed to connect to cloud Atlas")
 
-    mongodb_client = initialize(config.get('ATLAS_URI'))
+    mongodb_client = initialize()
     setup_llm(config.get('GOOGLE_API_KEY'))
     connect_llm(mongodb_client)
 

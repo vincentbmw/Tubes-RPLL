@@ -15,9 +15,12 @@
             <div class="menu-items" id="menu-items">
                 <button onclick="window.location.href='/chatpage'" class="menu-item new-chat">New Chat</button>
                 {% for chat in chats %}
-                <button onclick="window.location.href='/chatpage/{{ chat.chatId }}'" class="menu-item" data-chat-id="{{ chat.chatId }}">
-                    {{ chat.firstPrompt }}
-                </button>
+                <div class="menu-item-container">
+                    <button onclick="window.location.href='/chatpage/{{ chat.chatId }}'" class="menu-item" data-chat-id="{{ chat.chatId }}">
+                        {{ chat.firstPrompt }}
+                    </button>
+                    <span class="trash-icon" onclick="deleteChat('{{ chat.chatId }}')">🗑️</span>
+                </div>
                 {% endfor %}
                 
             </div>
@@ -33,7 +36,7 @@
         </div>
         <div class="chat-section">
             {% block body %}
-            <div class="chat-box" id="chat-box" data-user-img="{{ url_for('static', filename='img/male.PNG') }}" data-bot-img="{{ url_for('static', filename='img/dog.PNG') }}">
+            <div class="chat-box" id="chat-box">
                 <!-- Default messages or empty state -->
             </div>
             {% endblock %}
