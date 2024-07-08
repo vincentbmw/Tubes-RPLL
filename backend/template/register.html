@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pawspective - Sign up</title>
+    <link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='img/pawspectiveicon.png') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='signupstyle.css') }}">
+</head>
+<body>
+    <div class="login-container">
+        <img src="{{ url_for('static', filename='img/pawspectiveIcon.png') }}" alt="Logo">
+        <h1>Sign up</h1>
+        <form action="/api/registerpage" method="POST">
+            <label for="name">Name:</label>
+            <input type="text" id="name" name="name" placeholder="Insert Your name" required>
+            
+            <label for="email">Email Address:</label>
+            <input type="email" id="email" name="email" placeholder="Insert Your email" required>
+
+            <label for="password">Password:</label>
+            <input type="password" id="password" name="password" placeholder="Insert Your Password" required>
+            
+            <div class="radio-group">
+                <label><input type="radio" name="gender" value="male" required> Male</label>
+                <label><input type="radio" name="gender" value="female" required> Female</label>
+            </div>
+
+            <button type="submit">Sign up</button>
+        </form>
+        <div class="signup-link">
+            Already have an account? <a href="{{ url_for('loginpage') }}">Sign in</a>
+        </div>
+    </div>
+</body>
+</html>
