@@ -1,0 +1,61 @@
+body {
+    margin: 0;
+    padding: 0;
+    font-family: Arial, sans-serif;
+    background: url(img/backgroundLoginRegis2.webp) no-repeat center center fixed;
+    background-size: cover;
+}
+
+.profile-container {
+    width: 576px;
+    padding: 40px;
+    background-color: rgba(233,196,156);
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+}
+
+.profile-container img {
+    width: 135px; /* Adjust logo width */
+    height: auto; /* Maintain aspect ratio */
+}
+
+.profile-container h1 {
+    margin-bottom: 20px;
+    font-size: 30px;
+}
+
+.profile-container label {
+    display: block;
+    text-align: left;
+    margin-bottom: 5px;
+    font-weight: bold;
+}
+
+.profile-container input {
+    width: calc(100% - 20px);
+    padding: 10px;
+    margin: 10px 0;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+.profile-container button {
+    width: calc(100%);
+    padding: 10px;
+    margin: 10px 0;
+    border: none;
+    border-radius: 5px;
+    background-color: rgba(205,153,106);
+    color: white;
+    cursor: pointer;
+    font-size: 20px;
+}
+
+.profile-container button:hover {
+    background-color: #e0a674;
+}
