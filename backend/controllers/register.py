@@ -1,4 +1,8 @@
+<<<<<<< Updated upstream
 from flask import Blueprint, request, jsonify
+=======
+from flask import Blueprint, request, render_template, redirect, url_for, flash
+>>>>>>> Stashed changes
 from werkzeug.security import generate_password_hash
 from controllers.database import get_users_db  
 
@@ -16,12 +20,23 @@ def register():
         password = data.get('password')
         gender = data.get('gender')
 
+<<<<<<< Updated upstream
         if not all([name, email, password, gender]): 
             return jsonify({'error': 'Missing required fields'}), 400
 
         existing_user = users_collection.find_one({'email': email})
         if existing_user:
             return jsonify({'error': 'Email already exists'}), 400
+=======
+            if not all([name, email, password, gender]): 
+                flash('Missing required fields', 'error') # flash message
+                return redirect(url_for('registerpage'))
+
+            existing_user = users_collection.find_one({'email': email})
+            if existing_user:
+                flash('Email already exists', 'error')
+                return redirect(url_for('registerpage'))
+>>>>>>> Stashed changes
 
         hashed_password = generate_password_hash(password)
 
@@ -42,5 +57,13 @@ def register():
 
         return jsonify({'message': 'User registered successfully'}), 201
 
+<<<<<<< Updated upstream
     except Exception as e:
         return jsonify({'error': str(e)}), 500
+=======
+        except Exception as e:
+            flash(str(e), 'error') # flash message
+            return redirect(url_for('registerpage'))
+    
+    return render_template('register.html')
+>>>>>>> Stashed changes
