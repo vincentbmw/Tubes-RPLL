@@ -1,8 +1,3 @@
-<<<<<<< HEAD
-<<<<<<< Updated upstream
-=======
-=======
->>>>>>> e83a98d14695282989988df74464a651f63f0b8d
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -16,7 +11,6 @@
     <div class="login-container">
         <img src="{{ url_for('static', filename='img/pawspectiveIcon.png') }}" alt="Logo">
         <h1>Sign up</h1>
-<<<<<<< HEAD
 
         <form action="/register" method="POST">
             <label for="name">Name:</label>
@@ -37,21 +31,6 @@
             <label for="password">Password:</label>
             <input type="password" id="password" name="password" placeholder="Insert your Password" required>
 
-=======
-        {% if error %}
-        <p style="color: red;">{{ error }}</p>
-        {% endif %}
-        <form action="/register" method="POST">
-            <label for="name">Name:</label>
-            <input type="text" id="name" name="name" placeholder="Insert your name" required>
-            
-            <label for="email">Email Address:</label>
-            <input type="email" id="email" name="email" placeholder="Insert your email" required>
-
-            <label for="password">Password:</label>
-            <input type="password" id="password" name="password" placeholder="Insert your Password" required>
-            
->>>>>>> e83a98d14695282989988df74464a651f63f0b8d
             <div class="radio-group">
                 <label><input type="radio" name="gender" value="male" required> Male</label>
                 <label><input type="radio" name="gender" value="female" required> Female</label>
@@ -65,7 +44,3 @@
     </div>
 </body>
 </html>
-<<<<<<< HEAD
->>>>>>> Stashed changes
-=======
->>>>>>> e83a98d14695282989988df74464a651f63f0b8d
