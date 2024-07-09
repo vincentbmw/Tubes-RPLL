@@ -19,6 +19,12 @@ body {
     text-align: center;
 }
 
+.error-message {
+    color: red;
+    font-size: 14px;
+    margin-top: 5px;
+}
+
 .login-container img {
     width: 135px;
     height: auto;

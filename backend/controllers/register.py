@@ -1,4 +1,4 @@
-from flask import Blueprint, request, render_template, redirect, url_for
+from flask import Blueprint, request, render_template, redirect, url_for, flash
 from werkzeug.security import generate_password_hash
 from controllers.database import get_users_db  
 
@@ -17,11 +17,13 @@ def register():
             gender = request.form.get('gender')
 
             if not all([name, email, password, gender]): 
-                return render_template('register.html', error='Missing required fields')
+                flash('Missing required fields', 'error') # flash message
+                return redirect(url_for('registerpage'))
 
             existing_user = users_collection.find_one({'email': email})
             if existing_user:
-                return render_template('register.html', error='Email already exists')
+                flash('Email already exists', 'error')
+                return redirect(url_for('registerpage'))
 
             hashed_password = generate_password_hash(password)
 
@@ -43,6 +45,7 @@ def register():
             return redirect(url_for('loginpage'))
 
         except Exception as e:
-            return render_template('register.html', error=str(e))
+            flash(str(e), 'error') # flash message
+            return redirect(url_for('registerpage'))
     
     return render_template('register.html')
