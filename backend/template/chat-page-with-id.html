@@ -1,7 +1,7 @@
 {% extends 'chat-page.html' %}
 
 {% block body %}
-    <div class="chat-box" id="chat-box" data-user-img="{{ url_for('static', filename='img/male.PNG') }}" data-bot-img="{{ url_for('static', filename='img/dog.PNG') }}">
+    <div class="chat-box" id="chat-box">
         {% for message in messages %}
             <div class="message {{ message.sender }}">
                 {% if message.sender == 'bot' %}

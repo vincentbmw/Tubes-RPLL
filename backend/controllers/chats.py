@@ -64,11 +64,15 @@ class PreviousChatSaver(ChatSaver):
             print(f"Error: Chat with ID {chat_id} not found for user {user_id}")
 
 class NewChatSaver(ChatSaver):
+    def __init__(self):
+        self.chat_id = None
+
     def save(self, user_id, user_message, bot_response, chat_id=None):
         db = get_users_db()
         repository = ChatRepository(db)
+        self.chat_id = str(uuid.uuid4())
         new_chat = {
-            "chatId": str(uuid.uuid4()),
+            "chatId": self.chat_id,
             "createdAt": datetime.datetime.utcnow(),
             "prompts": [
                 {"user": user_message, "bot": bot_response}
@@ -86,7 +90,7 @@ def get_chats():
     try:
         user_id = session.get('user_id')
         if not user_id:
-            return jsonify({'error': 'Unauthorized'}), 401
+            return None, 401
 
         chats = repository.get_chats_by_user_id(user_id)
         if chats is None:
@@ -112,7 +116,7 @@ def get_chat_prompts(chat_id):
     try:
         user_id = session.get('user_id')
         if not user_id:
-            return jsonify({'error': 'Unauthorized'}), 401
+            return None, 401
 
         user = users_collection.find_one(
             {'_id': ObjectId(user_id), 'chats.chatId': chat_id},
@@ -138,7 +142,8 @@ def get_chat_prompts(chat_id):
         return messages, 200
 
     except Exception as e:
-        return jsonify({'error': str(e)}), 500
+        return None, 500
+    
     
 @chats_blueprint.route('/delete_chats/<chat_id>', methods=['DELETE'])
 def delete_chat(chat_id):

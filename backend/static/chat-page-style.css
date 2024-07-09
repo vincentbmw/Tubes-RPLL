@@ -88,8 +88,30 @@ body {
     background-color: #CD996A;
 }
 
+.menu-item.selected {
+    background-color: #ECB176;
+}
+
 .menu-item:hover {
     background-color: #FBEED7;
+}
+
+.menu-item-container {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.trash-icon {
+    display: none;
+    position: absolute;
+    right: 10px;
+    cursor: pointer;
+}
+
+.menu-item-container .menu-item.selected + .trash-icon {
+    display: inline;
+    color: red;
 }
 
 
