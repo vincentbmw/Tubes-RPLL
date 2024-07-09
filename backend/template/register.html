@@ -11,15 +11,18 @@
     <div class="login-container">
         <img src="{{ url_for('static', filename='img/pawspectiveIcon.png') }}" alt="Logo">
         <h1>Sign up</h1>
+        {% if error %}
+        <p style="color: red;">{{ error }}</p>
+        {% endif %}
         <form action="/register" method="POST">
             <label for="name">Name:</label>
-            <input type="text" id="name" name="name" placeholder="Insert Your name" required>
+            <input type="text" id="name" name="name" placeholder="Insert your name" required>
             
             <label for="email">Email Address:</label>
-            <input type="email" id="email" name="email" placeholder="Insert Your email" required>
+            <input type="email" id="email" name="email" placeholder="Insert your email" required>
 
             <label for="password">Password:</label>
-            <input type="password" id="password" name="password" placeholder="Insert Your Password" required>
+            <input type="password" id="password" name="password" placeholder="Insert your Password" required>
             
             <div class="radio-group">
                 <label><input type="radio" name="gender" value="male" required> Male</label>
