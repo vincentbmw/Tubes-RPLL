@@ -5,13 +5,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Pawspective - Sign up</title>
     <link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='img/pawspectiveicon.png') }}">
-    <link rel="stylesheet" href="{{ url_for('static', filename='signupstyle.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='signup-style.css') }}">
 </head>
 <body>
     <div class="login-container">
         <img src="{{ url_for('static', filename='img/pawspectiveIcon.png') }}" alt="Logo">
         <h1>Sign up</h1>
-        <form action="/api/registerpage" method="POST">
+        <form action="/register" method="POST">
             <label for="name">Name:</label>
             <input type="text" id="name" name="name" placeholder="Insert Your name" required>
             
