@@ -7,7 +7,7 @@ document.addEventListener('DOMContentLoaded', function () {
     const userProfile = document.getElementById('user-profile');
     const dropdownContent = document.getElementById('dropdown-content');
     const logoutButton = document.getElementById('logout-button');
-    const popup = document.getElementById('popup-button');
+    const popup = document.getElementById('popup-logout');
     const cancelButton = document.getElementById('cancel-button');
     const confirmButton = document.getElementById('confirm-button');
     const chatId = document.getElementById('chat-id').value;
@@ -50,7 +50,8 @@ function appendMessage(sender, message) {
     const messageElement = document.createElement('div');
     messageElement.classList.add('message', sender);
 
-    const profilePic = sender === 'user' ? '/static/img/male.PNG' : '/static/img/dog.PNG';
+    const profileImage = document.getElementById('profile-image').value;
+    const profilePic = sender === 'user' ? profileImage : '/static/img/dog.PNG';
 
     if (sender === 'bot') {
         messageElement.innerHTML = `

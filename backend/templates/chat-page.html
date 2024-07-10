@@ -42,6 +42,7 @@
             {% endblock %}
             <div class="chat-input-container">
                     <input type="hidden" name="chatId" id="chat-id" value="{{ chat_id }}">
+                    <input type="hidden" name="profileImage" id="profile-image" value="{{ url_for('static', filename='img/' ~ profile_image) }}">
                     <input type="text" name="query" id="user-input" placeholder="Type a new message here...">
                     <button type="submit" id="send-button">Send</button>
             </div>

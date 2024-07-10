@@ -9,7 +9,7 @@
                     <div class="content">{{ message.message }}</div>
                 {% else %}
                     <div class="content">{{ message.message }}</div>
-                    <img src="{{ url_for('static', filename='img/male.PNG') }}" alt="User">
+                    <img src="{{ url_for('static', filename='img/' ~ profile_image) }}" alt="User">
                 {% endif %}
             </div>
         {% endfor %}
