@@ -56,7 +56,8 @@ def get_user_profile_data():
 
         profile_data = {
             'profile_picture': user.get('profile_picture'),
-            'username': user.get('name')
+            'username': user.get('name'),
+            'gender': user.get('gender')
         }
 
         return profile_data, 200

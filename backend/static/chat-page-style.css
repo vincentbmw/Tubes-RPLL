@@ -32,13 +32,46 @@ body {
 }
 
 .menu-button {
-    align-self: flex-end;
-    cursor: pointer;
     font-size: 25px;
+    display: flex;
+    justify-content: flex-end;
+    flex-direction: row;
+    width: 100%;
 }
 
 .menu-button.closed {
-    align-self: center;
+    flex-direction: column-reverse;
+    margin: 0 auto;
+}
+
+.trash-icon {
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 20px;
+    margin: 0 5px;
+}
+
+.trash-icon:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.trash-icon:hover, .sidebar-button:hover {
+    opacity: 0.5;
+}
+
+.menu-button.closed .trash-icon {
+    margin: 5px 0;
+    text-align: center;
+}
+
+.sidebar-button {
+    cursor: pointer;
+}
+
+.menu-button.closed .sidebar-button {
+    text-align: center;
 }
 
 .user-profile {
@@ -102,12 +135,16 @@ body {
     align-items: center;
 }
 
+/*
 .trash-icon {
+    background: none;
+    border: none;
     display: none;
     position: absolute;
     right: 10px;
     cursor: pointer;
 }
+*/
 
 .menu-item-container .menu-item.selected + .trash-icon {
     display: inline;
@@ -244,7 +281,7 @@ body {
 
 
 /* START POPUP SECTION */
-.popup {
+.popup-logout, .popup-delete {
     display: none;
     position: fixed;
     top: 0;
@@ -283,14 +320,11 @@ body {
     margin: 0 10px;
     border-radius: 5px;
     cursor: pointer;
-}
-
-.cancel-button, .confirm-button {
     background-color: #CD996A;
     color: white;
 }
 
-.cancel-button:hover, .confirm-button:hover {
+.popup-button:hover {
     background-color: #E9C49C;
     color: black;
 }
