@@ -1,17 +1,18 @@
 document.addEventListener('DOMContentLoaded', function () {
     const menuButton = document.getElementById('menu-button');
+    const sidebarButton = document.getElementById('sidebar-button');
     const sidebar = document.getElementById('sidebar');
     const menuItems = document.getElementById('menu-items');
     const menuItem = document.querySelectorAll('.menu-item');
     const userProfile = document.getElementById('user-profile');
     const dropdownContent = document.getElementById('dropdown-content');
     const logoutButton = document.getElementById('logout-button');
-    const popup = document.getElementById('popup');
+    const popup = document.getElementById('popup-button');
     const cancelButton = document.getElementById('cancel-button');
     const confirmButton = document.getElementById('confirm-button');
     const chatId = document.getElementById('chat-id').value;
 
-    menuButton.addEventListener('click', function () {
+    sidebarButton.addEventListener('click', function () {
         sidebar.classList.toggle('closed');
         menuItems.classList.toggle('closed');
         userProfile.classList.toggle('closed');
@@ -21,7 +22,6 @@ document.addEventListener('DOMContentLoaded', function () {
     menuItem.forEach(item => {
         if (item.getAttribute('data-chat-id') === chatId) {
             item.classList.add('selected');
-            item.nextElementSibling.classList.add('visible');
         }
     });
 

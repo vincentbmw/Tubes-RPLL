@@ -42,17 +42,25 @@ def loginpage():
 def chatpage():
     chat_list, status_code = get_chats()
 
-    return render_template('chat-page.html', chats=chat_list)
+    profile_data, profile_status = get_user_profile_data()
+
+    profile_image = 'male.PNG' if profile_data['gender'] == 'male' else 'female.PNG'
+
+    return render_template('chat-page.html', chats=chat_list, profile_data=profile_data, profile_image=profile_image)
 
 @app.route('/chatpage/<chat_id>')
 def chatpage_with_id(chat_id):
     chat_list, status_code = get_chats()
     prompts_data, prompts_status_code = get_chat_prompts(chat_id)
     print(prompts_data)
+
+    profile_data, profile_status = get_user_profile_data()
+    profile_image = 'male.PNG' if profile_data['gender'] == 'male' else 'female.PNG'
+
     if prompts_status_code == 200 and prompts_data is not None:
-        return render_template('chat-page-with-id.html', chats=chat_list, chat_id=chat_id, messages=prompts_data)
+        return render_template('chat-page-with-id.html', chats=chat_list, chat_id=chat_id, messages=prompts_data, profile_data=profile_data, profile_image=profile_image)
     else:
-        return render_template('chat-page-with-id.html', chats=chat_list, chat_id=chat_id, messages=[])
+        return render_template('chat-page-with-id.html', chats=chat_list, chat_id=chat_id, messages=[], profile_data=profile_data, profile_image=profile_image)
 
 @app.route('/log', methods=['POST'])
 def log_message():
