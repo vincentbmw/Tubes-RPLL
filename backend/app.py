@@ -5,7 +5,7 @@ from flask import render_template, jsonify, request, session, Flask
 from dotenv import find_dotenv, dotenv_values
 from controllers.login import login_blueprint
 from controllers.register import register_blueprint
-from controllers.database import DatabaseFactory, get_user_profile_data, initialize
+from controllers.database import get_user_profile_data, initialize
 from controllers.manage_profile import manage_profile_blueprint
 from controllers.logout import logout_blueprint
 from controllers.chats import chats_blueprint, get_chat_prompts, get_chats
