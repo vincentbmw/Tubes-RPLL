@@ -1,8 +1,7 @@
 import os
 from pyngrok import ngrok
 from urllib.request import urlopen
-from flask import Flask
-from flask import render_template, jsonify, request, session
+from flask import render_template, jsonify, request, session, Flask
 from dotenv import find_dotenv, dotenv_values
 from controllers.login import login_blueprint
 from controllers.register import register_blueprint
@@ -23,6 +22,13 @@ app.register_blueprint(register_blueprint)
 app.register_blueprint(manage_profile_blueprint)
 app.register_blueprint(logout_blueprint)
 
+@app.route('/')
+def splashpage():
+    return render_template('splash.html')
+
+@app.route('/homepage')
+def homepage():
+    return render_template('homepage.html')
 
 @app.route('/registerpage')
 def registerpage():

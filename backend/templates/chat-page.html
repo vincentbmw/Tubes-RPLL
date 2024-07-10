@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Chatbot UI</title>
+    <link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='img/pawspectiveIcon.png') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='chat-page-style.css') }}">
 </head>
 <body>
@@ -30,14 +31,13 @@
                 <span>Welcome back, Evan</span>
                 <div class="dropdown-content" id="dropdown-content">
                     <button class="dropdown-item" id="logout-button">Log Out</button>
-                    <button class="dropdown-item" id="manage-profile-button">Manage Profile</button>
+                    <button class="dropdown-item" onclick="window.location.href='/manage_profile'">Manage Profile</button>
                 </div>
             </div>
         </div>
         <div class="chat-section">
             {% block body %}
             <div class="chat-box" id="chat-box">
-                <!-- Default messages or empty state -->
             </div>
             {% endblock %}
             <div class="chat-input-container">
