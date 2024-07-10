@@ -5,6 +5,7 @@ urllib3==1.26.15
 
 ## LLMs / embeddings
 llama-index-llms-gemini
+llama-index-llms-llama-api
 llama-index
 llama-index-vector-stores-mongodb
 llama-index-embeddings-huggingface
