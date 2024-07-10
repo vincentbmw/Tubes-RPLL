@@ -16,6 +16,15 @@
       background-repeat: no-repeat;
       min-height: 100vh;
       margin: 0; 
+      position: relative;
+    }
+
+    .content-container { 
+      position: absolute;
+      top: 50%;
+      left: 48%;
+      transform: translate(-50%, -50%);
+      text-align: center;
     }
 
     h1 {
@@ -24,16 +33,6 @@
       font-family: 'Poppins', sans-serif;
       color: #333;
       margin-bottom: 1.5em;
-    }
-
-    .center-screen {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
-      width: 100%;
-      text-align: center;
-      flex-direction: column;
     }
 
     .btn-container {
@@ -66,8 +65,7 @@
   </style>
 </head>
 <body>
-
-<div class="container center-screen">
+<div class="content-container">
   <h1>Solution For Your Dog's Problem</h1>
   <div class="btn-container">
     <a href="{{ url_for('loginpage') }}" class="btn btn-custom">LOGIN</a>
