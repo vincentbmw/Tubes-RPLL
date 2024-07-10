@@ -29,6 +29,6 @@ def login():
             return redirect(url_for('chatpage'))
 
         except Exception as e:
-            return render_template('login-page.html', error=str(e))
+            return render_template('login.html', error=str(e))
     
-    return render_template('login-page.html')
+    return render_template('login.html')

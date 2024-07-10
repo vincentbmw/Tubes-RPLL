@@ -17,7 +17,7 @@ def register():
             gender = request.form.get('gender')
 
             if not all([name, email, password, gender]): 
-                flash('Missing required fields', 'error') # flash message
+                flash('Missing required fields', 'error')
                 return redirect(url_for('registerpage'))
 
             existing_user = users_collection.find_one({'email': email})
@@ -45,7 +45,7 @@ def register():
             return redirect(url_for('loginpage'))
 
         except Exception as e:
-            flash(str(e), 'error') # flash message
+            flash(str(e), 'error')
             return redirect(url_for('registerpage'))
     
     return render_template('register.html')

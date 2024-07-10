@@ -20,8 +20,8 @@ body {
 }
 
 .profile-container img {
-    width: 135px; /* Adjust logo width */
-    height: auto; /* Maintain aspect ratio */
+    width: 135px;
+    height: auto; 
 }
 
 .profile-container h1 {
@@ -58,4 +58,17 @@ body {
 
 .profile-container button:hover {
     background-color: #e0a674;
+}
+
+.radio-group { 
+    display: flex;        
+    align-items: center;  
+    justify-content: center;
+    margin: 10px 0;      
+}
+
+.radio-group label {
+    margin-right: 20px;  
+    display: inline-flex; 
+    align-items: center;  
 }
