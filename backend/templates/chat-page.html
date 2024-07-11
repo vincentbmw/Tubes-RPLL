@@ -31,6 +31,7 @@
                 <span>Welcome back, {{ profile_data['username'] }}</span>
                 <div class="dropdown-content" id="dropdown-content">
                     <button class="dropdown-item" id="logout-button">Log Out</button>
+                    <button class="dropdown-item" id="feedback-button">Isi Feedback</button>
                     <button onclick="window.location.href='/manage_profile'" class="dropdown-item" id="manage-profile-button">Manage Profile</button>
                 </div>
             </div>
@@ -38,7 +39,6 @@
         <div class="chat-section">
             {% block body %}
             <div class="chat-box" id="chat-box">
-                <!-- Default messages or empty state -->
             </div>
             {% endblock %}
             <div class="chat-input-container">
@@ -47,6 +47,18 @@
                     <input type="text" name="query" id="user-input" placeholder="Type a new message here...">
                     <button type="submit" id="send-button">Send</button>
             </div>
+        </div>
+    </div>
+
+    <div class="popup-feedback" id="popup-feedback">
+        <div class="popup-content">
+            <img src="{{ url_for('static', filename='img/pawspectiveIcon.png') }}" alt="Pawspective Logo" class="popup-logo">
+            <h2>FEEDBACK</h2>
+            <form id="feedbackForm">
+                <textarea id="feedbackText" placeholder="Tuliskan feedback Anda di sini..." required></textarea>
+                <button id="cancel-feedback-button" class="popup-button cancel-feedback-button">Cancel</button>
+                <button type="submit" class="popup-button">Kirim Feedback</button>
+            </form>
         </div>
     </div>
 
@@ -78,6 +90,36 @@
 
     <script src="{{ url_for('static', filename='chat-page-script.js') }}"></script>
     <script src="{{ url_for('static', filename='delete-button-script.js') }}"></script>
-    
+    <script>
+        document.getElementById('feedbackForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+            const popupFeedback = document.getElementById('popup-feedback');
+            const feedbackText = document.getElementById('feedbackText').value;
+            console.log(feedbackText);
+
+            fetch('/feedback', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ feedback: feedbackText })
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
+            .then(data => {
+                console.log('Feedback sent:', data);
+                alert('Feedback Anda telah terkirim!');
+                popupFeedback.style.display = 'none';
+            })
+            .catch(error => {
+                console.error('Error sending feedback:', error);
+                alert('Terjadi kesalahan saat mengirim feedback. Silahkan coba lagi.');
+            });
+        });
+    </script>
 </body>
 </html>
