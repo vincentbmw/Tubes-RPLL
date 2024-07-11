@@ -5,10 +5,12 @@ document.addEventListener('DOMContentLoaded', function () {
     const menuItems = document.getElementById('menu-items');
     const menuItem = document.querySelectorAll('.menu-item');
     const userProfile = document.getElementById('user-profile');
-    const dropdownContent = document.getElementById('dropdown-content');
     const logoutButton = document.getElementById('logout-button');
-    const popup = document.getElementById('popup-logout');
+    const feedbackButton = document.getElementById('feedback-button');
+    const popupLogout = document.getElementById('popup-logout');
+    const popupFeedback = document.getElementById('popup-feedback');
     const cancelButton = document.getElementById('cancel-button');
+    const cancelFeedback = document.getElementById('cancel-feedback-button');
     const confirmButton = document.getElementById('confirm-button');
     const chatId = document.getElementById('chat-id').value;
 
@@ -30,19 +32,26 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 
     logoutButton.addEventListener('click', function () {
-        popup.style.display = 'flex';
+        popupLogout.style.display = 'flex';
+    });
+
+    feedbackButton.addEventListener('click', function () {
+        popupFeedback.style.display = 'flex';
     });
 
     cancelButton.addEventListener('click', function () {
-        popup.style.display = 'none';
+        popupLogout.style.display = 'none';
+    });
+
+    cancelFeedback.addEventListener('click', function () {
+        popupFeedback.style.display = 'none';
     });
 
     confirmButton.addEventListener('click', function () {
         // Add your logout logic here
         alert('Logged out!');
-        popup.style.display = 'none';
+        popupLogout.style.display = 'none';
     });
-
 });
 
 function appendMessage(sender, message) {

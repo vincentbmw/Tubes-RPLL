@@ -1,11 +1,12 @@
 import os
 from pyngrok import ngrok
+from bson.objectid import ObjectId
 from urllib.request import urlopen
 from flask import render_template, jsonify, request, session, Flask
 from dotenv import find_dotenv, dotenv_values
 from controllers.login import login_blueprint
 from controllers.register import register_blueprint
-from controllers.database import get_user_profile_data, initialize
+from controllers.database import get_user_profile_data, initialize, get_users_db
 from controllers.manage_profile import manage_profile_blueprint
 from controllers.logout import logout_blueprint
 from controllers.chats import chats_blueprint, get_chat_prompts, get_chats
@@ -107,6 +108,40 @@ def get_prompts(chat_id):
         return jsonify(prompts_data), 200
     else:
         return jsonify(prompts_data), status_code
+
+@app.route('/feedback', methods=['POST'])
+def save_feedback():
+    db = get_users_db()
+    users_collection = db['users'] 
+
+    try:
+        user_id = session.get('user_id')
+        if not user_id:
+            return jsonify({'error': 'Unauthorized'}), 401
+
+        data = request.get_json()
+        feedback = data.get('feedback')
+
+        if not feedback:
+            return jsonify({'error': 'Feedback cannot be empty'}), 400
+
+        try:
+            result = users_collection.update_one(
+                {'_id': ObjectId(user_id)},
+                {'$set': {'feedback': feedback}}
+            )
+            if result.modified_count == 1:
+                print("Feedback berhasil disimpan!")
+                return jsonify({'message': 'Feedback saved successfully'}), 200
+            else:
+                print("Error: User tidak ditemukan")
+                return jsonify({'error': 'User not found'}), 404
+        except Exception as e:
+            print(f"Error saat update database: {str(e)}") 
+            return jsonify({'error': 'Database error'}), 500 
+
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
 
 if __name__ == '__main__':
     ip = urlopen('https://api.ipify.org').read().decode('utf-8')
